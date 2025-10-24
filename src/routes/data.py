@@ -3,7 +3,6 @@ from fastapi.responses import JSONResponse
 from helpers.config import get_settings, Settings
 from controllers import DataController, ProjectController
 from models import ResponseSignal
-import os
 import aiofiles
 import logging
 

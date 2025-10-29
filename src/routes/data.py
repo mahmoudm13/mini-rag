@@ -3,10 +3,11 @@ from fastapi.responses import JSONResponse
 from helpers.config import get_settings, Settings
 from controllers import DataController, ProjectController, ProcessController
 from .schemes.data import ProcessRequest
-from models import ResponseSignal, ProjectModel, ChunkModel
-from models.db_schemes import DataChunk
+from models import ResponseSignal, AssetTypeEnums, ProjectModel, ChunkModel, AssetModel
+from models.db_schemes import DataChunk, Asset
 import aiofiles
 import logging
+import os
 
 logger = logging.getLogger("uvicorn.error")
 
@@ -41,13 +42,13 @@ async def upload_data(request: Request, project_id: str, file: UploadFile,
         )
     
     # Generate unique filename for the uploaded file
-    files_path, file_id = data_controller.generate_unique_filepath(
+    file_path, file_id = data_controller.generate_unique_filepath(
         orig_file_name=file.filename,
         project_id=project_id
     )
     
     try:
-        async with aiofiles.open(files_path, "wb") as f:
+        async with aiofiles.open(file_path, "wb") as f:
             while chunck := await file.read(app_settings.FILE_DEFAULT_CHUNCK_SIZE):
                 await f.write(chunck)
     except Exception as e:
@@ -61,10 +62,24 @@ async def upload_data(request: Request, project_id: str, file: UploadFile,
             }
         )
     
+    # store the assets into the database
+    asset_model = await AssetModel.create_instance(
+        db_client=request.app.state.db_client
+    )
+    
+    asset_resource = Asset(
+        asset_project_id=project.id,
+        asset_type=AssetTypeEnums.FILE.value,
+        asset_name=file_id,
+        asset_size=os.path.getsize(file_path)
+    )
+    
+    asset_record = await asset_model.create_asset(asset_resource)
+    
     return JSONResponse(
         content={
             "signal": result_signal,
-            "file_id": file_id,
+            "file_id": str(asset_record.id),
         }
     )
 

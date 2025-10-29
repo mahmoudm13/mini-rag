@@ -15,6 +15,7 @@ This is a minimial implementation of the RAG model for question answering.
 $ conda create -n mini-rag python=3.8
 ```
 3) Activate the environment:
+
 ```bash
 $ conda activate mini-rag
 ```
@@ -56,6 +57,7 @@ $ sudo docker compose up -d
 ## Run the FastAPI server
 
 ```bash
+$ cd ../src
 $ uvicorn main:app --reload --host 0.0.0.0 --port 5000
 ```
 

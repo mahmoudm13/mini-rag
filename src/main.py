@@ -9,14 +9,10 @@ from contextlib import asynccontextmanager
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     settings = get_settings()
-    
-    print("connecting to mongodb")
     app.state.mongo_conn = AsyncIOMotorClient( settings.MONGODB_URL )
     app.state.db_client = app.state.mongo_conn[settings.MONGODB_DATABASE]
     
     yield
-    
-    print("cleaning up resources")
     
     app.state.mongo_conn.close()
 

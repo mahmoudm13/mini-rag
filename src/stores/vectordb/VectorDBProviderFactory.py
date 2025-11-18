@@ -1,8 +1,8 @@
 from .providers import QdrantDBProvider
 from .VectorDBInterface import VectorDBInterface
 from .VectorDBEnums import VectorDBEnums
-from ...helpers.config import Settings
-from ...controllers.BaseController import BaseController
+from helpers.config import Settings
+from controllers.BaseController import BaseController
 from typing import Optional
 
 class VectorDBProviderFactory:

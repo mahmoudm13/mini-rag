@@ -22,6 +22,7 @@ class CoHereProvider(LLMInterface):
         
         self.client = cohere.Client(api_key=self.api_key)
         
+        self.enums = CoHereEnums
         self.logger = logging.getLogger(__name__)
 
 
@@ -79,7 +80,7 @@ class CoHereProvider(LLMInterface):
             return None
         
         input_type = CoHereEnums.DOCUMENT.value
-        if input_type == DocumentTypeEnums.QUERY.value:
+        if document_type == DocumentTypeEnums.QUERY.value:
             input_type = CoHereEnums.QUERY.value
         
         response = self.client.embed(

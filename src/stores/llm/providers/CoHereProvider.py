@@ -25,19 +25,15 @@ class CoHereProvider(LLMInterface):
         self.enums = CoHereEnums
         self.logger = logging.getLogger(__name__)
 
-
     def set_generation_model(self, model_id: str):
         self.generation_model_id = model_id
-    
     
     def set_embedding_model(self, model_id: str, embedding_size: int):
         self.embedding_model_id = model_id
         self.embedding_size = embedding_size
         
-    
     def _process_text(self, text: str) -> str:
         return text[:self.default_input_max_charactrers].strip()
-    
     
     def generate_text(self, prompt: str, chat_history: list=[], 
                       max_output_tokens: Optional[int] = None,
@@ -67,7 +63,6 @@ class CoHereProvider(LLMInterface):
             return None
         
         return response.text
-      
         
     def embed_text(self, text: str, document_type: Optional[str] = None) -> Optional[List[float]]:
         
@@ -96,9 +91,8 @@ class CoHereProvider(LLMInterface):
 
         return response.embeddings.float[0]
     
-    
     def construct_prompt(self, prompt: str, role: str):
         return {
             "role": role,
-            "text": self._process_text(prompt),
+            "text": prompt,
         }

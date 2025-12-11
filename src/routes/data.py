@@ -5,6 +5,7 @@ from controllers import DataController, ProjectController, ProcessController
 from .schemes.data import ProcessRequest
 from models import ResponseSignal, AssetTypeEnums, ProjectModel, ChunkModel, AssetModel
 from models.db_schemes import DataChunk, Asset
+from controllers import NLPController
 import aiofiles
 import logging
 import os
@@ -99,6 +100,13 @@ async def process_endpoint(request: Request, project_id: int, process_request: P
         project_id=project_id
     )
     
+    nlp_controller = NLPController(
+        vector_db_client=request.app.state.vector_db_client,
+        generation_client=request.app.state.generation_client,
+        embedding_client=request.app.state.embedding_client,
+        template_parser=request.app.state.template_parser,
+    )
+    
     chunk_model = await ChunkModel.create_instance(
         db_client=request.app.state.db_client
     )
@@ -150,6 +158,10 @@ async def process_endpoint(request: Request, project_id: int, process_request: P
         )
     
     if do_reset == 1:
+        collection_name = nlp_controller.create_collection_name(project_id=project.project_id)
+        
+        _ = await request.app.state.vector_db_client.delete_collection(collection_name=collection_name)
+        
         _ = await chunk_model.delete_chunks_by_project_id(project_id=project.project_id)
     
     no_records = 0

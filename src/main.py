@@ -6,7 +6,8 @@ from stores.llm.LLMProviderFactory import LLMProviderFactory
 from stores.vectordb.VectorDBProviderFactory import VectorDBProviderFactory
 from stores.llm.templates.template_parser import TemplateParser
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
-# from sqlalchemy.orm import sessionmaker
+from utils.metrics import setup_metrics
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -23,7 +24,7 @@ async def lifespan(app: FastAPI):
     )
     
     llm_provider_factory = LLMProviderFactory(settings)
-    vector_db_provider_factory = VectorDBProviderFactory(settings)
+    vector_db_provider_factory = VectorDBProviderFactory(config=settings, db_client=app.state.db_client)
     
     # generation client
     app.state.generation_client = llm_provider_factory.create(
@@ -46,7 +47,7 @@ async def lifespan(app: FastAPI):
     app.state.vector_db_client = vector_db_provider_factory.create(
         provider=settings.VECTOR_DB_BACKEND,
     )
-    app.state.vector_db_client.connect()
+    await app.state.vector_db_client.connect()
     
     app.state.template_parser = TemplateParser(
         language=settings.PRIMARY_LANG,
@@ -56,9 +57,10 @@ async def lifespan(app: FastAPI):
     yield
     
     await app.state.db_engine.dispose()
-    app.state.vector_db_client.disconnect()
+    await app.state.vector_db_client.disconnect()
 
 app = FastAPI(lifespan=lifespan)
+setup_metrics(app)
 
 app.include_router(base.base_router)
 app.include_router(data.data_router)

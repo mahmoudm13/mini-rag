@@ -18,7 +18,7 @@ jobs:
         with:
           host: ${{ secrets.SSH_MAIN_HOST_IP }}
           username: github_user
-          keys: ${{ secrets.SSH_MAIN_PRIVATE_KEY }}
+          key: ${{ secrets.SSH_MAIN_PRIVATE_KEY }}
           script: |
             cd /home/github_user/workspace/mini-rag
             git checkout main

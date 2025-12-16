@@ -1,6 +1,8 @@
-### *A Lightweight, High-Performance Retrieval-Augmented Generation System*
+### *Mini-RAG*
 
 <p align="center"> <img src="https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI" /> <img src="https://img.shields.io/badge/OpenAI-412991?style=for-the-badge&logo=openai&logoColor=white" alt="OpenAI" /> <img src="https://img.shields.io/badge/Cohere-39594D?style=for-the-badge&logo=cohere&logoColor=white" alt="Cohere" /> <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL" /> <img src="https://img.shields.io/badge/PgVector-336791?style=for-the-badge&logo=postgresql&logoColor=white" alt="PgVector" /> <img src="https://img.shields.io/badge/Qdrant-FF4B4B?style=for-the-badge&logo=qdrant&logoColor=white" alt="Qdrant" /> <img src="https://img.shields.io/badge/Nginx-009639?style=for-the-badge&logo=nginx&logoColor=white" alt="Nginx" /> <img src="https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&logo=prometheus&logoColor=white" alt="Prometheus" /> <img src="https://img.shields.io/badge/Grafana-F46800?style=for-the-badge&logo=grafana&logoColor=white" alt="Grafana" /> </p> <p align="center"> <img src="https://img.shields.io/github/license/mahmoudm13/mini-rag?style=flat-square" alt="License" /> </p>
+
+Mini-RAG is a streamlined, scalable implementation of a Retrieval-Augmented Generation pipeline. It bridges the gap between static LLMs and dynamic private data by integrating high-performance vector databases (Qdrant & PgVector) with a robust FastAPI backend. Designed with observability in mind, it includes a full monitoring stack to track performance and system health in real-time.
 
 
 ## Requirements

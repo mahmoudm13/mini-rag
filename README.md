@@ -36,37 +36,37 @@ export PS1="\[\033[01;32m\]\u@\h:\w\n\[\033[00m\]\$ "
 ### Install the required packages
 
 ```bash
+$ cd src/
 $ pip install -r requirements.txt
 ```
 
-### Setup the environment variables
+### Setup the environment variables and Run Docker Compose Services
 
 ```bash
-$ cp .env.example .env
+$ cd ../docker/env
+$ cp .env.example.app .env.app
+$ cp .env.example.postgres .env.postgres
+$ cp .env.example.grafana .env.grafana
+$ cp .env.example.postgres-exporter .env.postgres-exporter
 ```
 
-Set your environment variables in the `.env` file. Like `OPENAI_API_KEY` value.
-
-## Run Docker Compose Services
+update `.env` files with your credientials
 
 ```bash
-$ cd docker
-$ cp .env.example .env
+$ cd ..
+$ sudo docker compose up --build -d
 ```
 
-update `.env` with your credientials
+## Access Services
 
+- FastAPI: http://localhost:8000
+- Grafana: http://localhost:3000
+- Prometheus: http://localhost:9090
+
+## Run the FastAPI server (Development Mode)
 ```bash
-$ sudo docker compose up -d
-```
-
-## Run the FastAPI server
-
-```bash
-$ cd ../src
 $ uvicorn main:app --reload --host 0.0.0.0 --port 5000
-```
+``` 
 
 ## POSTMAN Collection
-
-Download the POSTMAN collection from [/assets/mini-rag-app.postman_collection.json](/assets/mini-rag-app.postman_collection.json)
+Download the POSTMAN collection from [/src/assets/mini-rag-app.postman_collection.json](/src/assets/mini-rag-app.postman_collection.json)

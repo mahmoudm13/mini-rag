@@ -1,6 +1,11 @@
 from fastapi import FastAPI, APIRouter, Depends
 from helpers.config import get_settings, Settings
 from datetime import datetime
+from time import sleep
+import logging
+
+logger = logging.getLogger("uvicorn.error")
+
 
 base_router = APIRouter(
     prefix="/api/v1",
